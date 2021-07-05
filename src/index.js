@@ -26,8 +26,9 @@ async function displayCurrentWeather() {
     dailyHigh = convertKelvinToCelsius(myData.main.temp_max);
   }
   console.log(`The current temperature is ${currentTemp}.`);
-  console.log(`The high temperature is ${dailyLow}.`);
-  console.log(`The low temperature is ${dailyHigh}.`);
+  console.log(`The high temperature is ${dailyHigh}.`);
+  console.log(`The low temperature is ${dailyLow}.`);
+  console.log(myData);
 }
 
 displayCurrentWeather();
