@@ -29,6 +29,9 @@ async function displayCurrentWeather() {
   console.log(`The high temperature is ${dailyHigh}.`);
   console.log(`The low temperature is ${dailyLow}.`);
   console.log(myData);
+  document.getElementById('low-temp').textContent = `${dailyLow}°`;
+  document.getElementById('current-temp').textContent = `${currentTemp}°`;
+  document.getElementById('high-temp').textContent = `${dailyHigh}°`;
 }
 
 displayCurrentWeather();
