@@ -1,7 +1,7 @@
 import getCurrentWeather from './modules/api';
 
 let unitType = 'imperial';
-let currentCity = 'Louisville';
+let currentCity = 'Ashburn';
 
 function convertKelvinToFarenheit(inputTemp) {
   return Math.round((inputTemp - 273.15) * 1.8 + 32);
@@ -26,6 +26,14 @@ function customizeApiData(inputData) {
   return myData;
 }
 
+function determineCurrentCity() {
+  const inputCity = document.getElementById('city-input');
+  if (inputCity.value) {
+    currentCity = inputCity.value;
+    console.log(currentCity);
+  }
+}
+
 function determineUnitType() {
   if (document.getElementById('imperial').checked) {
     unitType = 'imperial';
@@ -35,6 +43,7 @@ function determineUnitType() {
 }
 
 async function displayCurrentWeather() {
+  determineCurrentCity();
   const apiData = await getCurrentWeather(currentCity);
   console.log(apiData);
   determineUnitType();
@@ -46,3 +55,5 @@ async function displayCurrentWeather() {
 }
 
 displayCurrentWeather();
+document.getElementById('submit-city').addEventListener('click', displayCurrentWeather);
+// document.getElementById('location-form').addEventListener('submit', displayCurrentWeather);
