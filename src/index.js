@@ -11,27 +11,38 @@ function convertKelvinToCelsius(inputTemp) {
   return Math.round((inputTemp - 273.15));
 }
 
-async function displayCurrentWeather() {
-  const myData = await getCurrentWeather(currentCity);
-  let currentTemp = '';
-  let dailyLow = '';
-  let dailyHigh = '';
+function customizeApiData(inputData) {
+  const myData = {};
   if (unitType === 'imperial') {
-    currentTemp = convertKelvinToFarenheit(myData.main.temp);
-    dailyLow = convertKelvinToFarenheit(myData.main.temp_min);
-    dailyHigh = convertKelvinToFarenheit(myData.main.temp_max);
+    myData.currentTemp = convertKelvinToFarenheit(inputData.main.temp);
+    myData.dailyHigh = convertKelvinToFarenheit(inputData.main.temp_max);
+    myData.dailyLow = convertKelvinToFarenheit(inputData.main.temp_min);
   } else if (unitType === 'metric') {
-    currentTemp = convertKelvinToCelsius(myData.main.temp);
-    dailyLow = convertKelvinToCelsius(myData.main.temp_min);
-    dailyHigh = convertKelvinToCelsius(myData.main.temp_max);
+    myData.currentTemp = convertKelvinToCelsius(inputData.main.temp);
+    myData.dailyHigh = convertKelvinToCelsius(inputData.main.temp_max);
+    myData.dailyLow = convertKelvinToCelsius(inputData.main.temp_min);
   }
-  console.log(`The current temperature is ${currentTemp}.`);
-  console.log(`The high temperature is ${dailyHigh}.`);
-  console.log(`The low temperature is ${dailyLow}.`);
-  console.log(myData);
-  document.getElementById('low-temp').textContent = `${dailyLow}°`;
-  document.getElementById('current-temp').textContent = `${currentTemp}°`;
-  document.getElementById('high-temp').textContent = `${dailyHigh}°`;
+  myData.location = inputData.name;
+  return myData;
+}
+
+function determineUnitType() {
+  if (document.getElementById('imperial').checked) {
+    unitType = 'imperial';
+  } else if (document.getElementById('metric').checked) {
+    unitType = 'metric';
+  }
+}
+
+async function displayCurrentWeather() {
+  const apiData = await getCurrentWeather(currentCity);
+  console.log(apiData);
+  determineUnitType();
+  const myData = customizeApiData(apiData);
+  document.getElementById('low-temp').textContent = `${myData.dailyLow}°`;
+  document.getElementById('current-temp').textContent = `${myData.currentTemp}°`;
+  document.getElementById('high-temp').textContent = `${myData.dailyHigh}°`;
+  document.getElementById('current-location').textContent = myData.location;
 }
 
 displayCurrentWeather();
